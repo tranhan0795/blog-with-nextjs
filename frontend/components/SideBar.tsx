@@ -4,8 +4,8 @@ import Link from "next/link";
 
 const SideBar: React.FC = () => {
     return (
-        <div className="w-72 lg:w-1/5  rounded-md hover:shadow-lg text-center
-         flex flex-col gap-5 px-5 py-2 h-fit">
+        <div className="w-72 lg:w-1/5  rounded-md text-center
+         flex flex-col gap-5 px-5 py-2 h-fit shadow-lg">
 
             <h2 className="text-center font-semibold text-lg ">About me</h2>
             <hr className="border-t border-black" />
@@ -61,7 +61,6 @@ const SideBar: React.FC = () => {
                 </p>
             </div>
             <div>
-
             </div>
         </div>
     );

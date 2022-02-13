@@ -1,6 +1,14 @@
 import Link from 'next/link';
+import { useUserContext } from '../context/UserContext';
+import { emptyUser } from '../context/UserContext';
 
 const Navbar: React.FC = () => {
+    const { user, setUser } = useUserContext();
+
+    const handleLogout = () => {
+        setUser(emptyUser);
+    }
+
     return (
         <nav className='fixed top-0 bg-black text-white flex justify-between items-center w-full h-12 z-10'>
             <ul className='flex pl-5 gap-5 font-semibold'>
@@ -10,8 +18,8 @@ const Navbar: React.FC = () => {
                     </Link>
                 </li>
                 <li>
-                    <Link href="/about">
-                        <a className='hover:text-gray-300'>About Us</a>
+                    <Link href="https://github.com/tranhan0795">
+                        <a className='hover:text-gray-300'>Contact Me</a>
                     </Link>
                 </li>
                 <li>
@@ -21,16 +29,28 @@ const Navbar: React.FC = () => {
                 </li>
             </ul>
             <ul className='flex gap-5 pr-5'>
-                <li>
-                    <Link href="/setting">
-                        <a className='hover:text-gray-300'>Setting</a>
-                    </Link>
-                </li>
-                <li>
-                    <Link href="/login">
-                        <a className='hover:text-gray-300'>Login</a>
-                    </Link>
-                </li>
+                {user.username !== "" ? <>
+                    <li>
+                        <Link href="/setting">
+                            <a className='hover:text-gray-300'>Setting</a>
+                        </Link>
+                    </li>
+                    <li>
+                        <button className='text-white h-full px-4 rounded-md bg-blue-800' onClick={handleLogout}>Logout</button>
+                    </li>
+                </> : <>
+                    <li>
+                        <Link href="/login">
+                            <a className='hover:text-gray-300'>Login</a>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/register">
+                            <a className='hover:text-gray-300'>Register</a>
+                        </Link>
+                    </li>
+                </>
+                }
             </ul>
         </nav>
     )

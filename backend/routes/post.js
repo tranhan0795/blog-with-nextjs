@@ -70,18 +70,20 @@ router.get("/:id", async (req, res) => {
 router.get("/", async (req, res) => {
     const username = req.query.user;
     const categoryName = req.query.cat;
+
     try {
         let posts;
+        
         if (username) {
             posts = await Post.find({username});
-        } else if (catName) {
+        } else if (categoryName) {
             posts = await Post.find({
                 categories: {
                     $in: [categoryName],
                 },
             });
-        } else {
-            posts = await Post.find();
+        } else {         
+            posts = await Post.find({});
         }
         res.status(200).json(posts);
     } catch (err) {

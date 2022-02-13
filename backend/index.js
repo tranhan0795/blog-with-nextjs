@@ -8,6 +8,7 @@ const userRoute = require('./routes/user');
 const postRoute = require('./routes/post');
 const categoryRoute = require('./routes/category');
 const multer = require('multer');
+const cors = require('cors');
 
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
@@ -27,6 +28,7 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
     res.status(200).json("File has been up loaded");
 })
 
+app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
