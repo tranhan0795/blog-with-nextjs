@@ -1,14 +1,22 @@
 const router = require("express").Router();
-const Post = require("../model/Post");
+const Post = require("../model/Post.js");
 
 //create post
 router.post("/", async (req, res) => {
-    const newPost = new Post(req.body);
+    console.log(req.body);
+    const newPost = new Post({
+        username:req.body.username,
+        content:req.body.content,
+        photo:req.body.photo,
+        title:req.body.title
+    });
     try {
         const savedPost = await newPost.save();
         res.status(200).json(savedPost);
     } catch (err) {
+       console.log(err);
         res.status(500).json(err);
+        
     }
 });
 

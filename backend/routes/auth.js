@@ -37,11 +37,36 @@ router.post("/login", async (req, res) => {
             res.status(400).json("wrong username or password!");
             return;
         }
+        req.session.username = user.username;
         res.status(200).json(user);
     } catch (e) {
         res.status(500).json(e);
     }
 })
 
+
+//logout
+router.post("/logout", async (req, res) => {
+    req.session.destroy(err => {
+        if(err){
+            res.status(200).json(err);
+        }else{
+            res.status(200).json(true);
+
+        }
+    })
+})
+
+
+//check login status
+router.post("/checklogin", async (req, res) => {
+    if (req.session.username === req.body.username) {
+        res.status(200).json(true);
+    } else {
+        res.status(200).json(false);
+    }
+
+
+})
 
 module.exports = router;

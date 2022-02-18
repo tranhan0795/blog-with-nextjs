@@ -4,8 +4,7 @@ const PostSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        unique: true
-    }, desc: {
+    }, content: {
         type: String,
         required: true
     }, photo: {

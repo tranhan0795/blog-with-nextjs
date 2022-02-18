@@ -24,20 +24,37 @@ const UserContextProvider: React.FC = ({ children }) => {
     const [user, setUser] = useState<User>(emptyUser);
 
     useEffect(() => {
-        const u = localStorage.getItem("user");
-        if (u === null) {
-            setUser(emptyUser);
-        } else {
-            setUser(JSON.parse(u))
-        }
+        (async function () {
+
+            const u = localStorage.getItem("user");
+            
+            //u===null: first time visit
+            //JSON.parse(u).username === '': user logged out
+
+            if (u !== null && JSON.parse(u).username !== '') {
+                try {
+                    const loginCheck: boolean = await fetch('http://localhost:4000/api/auth/checklogin', {
+                        method: 'POST',
+                        body: JSON.stringify(JSON.stringify(JSON.parse(u).username))
+                    }).then(res => res.json());
+
+                    if (loginCheck) {
+                        setUser(JSON.parse(u))
+                    }
+                } catch (e) {
+
+                }
+            }
+
+        })();
+
+
     }, [])
 
 
     useEffect(() => {
         localStorage.setItem("user", JSON.stringify(user));
     }, [user])
-
-
 
 
     return (

@@ -6,30 +6,43 @@ const mongoose = require('mongoose');
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
 const postRoute = require('./routes/post');
+const photoRoute = require('./routes/photo');
 const categoryRoute = require('./routes/category');
-const multer = require('multer');
 const cors = require('cors');
+const path = require("path");
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
+
+app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true
 }).then(() => console.log('connected')).catch(e => console.log(e));
 
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, 'backend/images');
-    }, filename: (req, file, callback) => {
-        callback(null, "test.png");
-    }
-})
+const store = new MongoDBStore({
+    uri: process.env.MONGO_URL,
+    collection: "usernameSessions",
+});
 
-const upload = multer({storage: storage});
-app.post("/api/upload", upload.single("file"), (req, res) => {
-    res.status(200).json("File has been up loaded");
-})
+app.use(
+    session({
+        secret: "ssadasd",
+        resave: false,
+        saveUninitialized: false,
+        polling:true,
+        cookie: {
+            maxAge: 7 * 24 * 60 * 60*1000
+        },
+
+        store: store,
+    })
+);
 
 app.use(cors());
-app.use(express.json());
+
+app.use("/images", express.static(path.join(__dirname, "/images")));
+app.use("/photo", photoRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/posts', postRoute);

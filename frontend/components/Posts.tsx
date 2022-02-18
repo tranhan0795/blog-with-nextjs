@@ -6,9 +6,9 @@ export interface PostData {
     _id: string,
     title: string,
     username: string,
-    photo?: string,
-    desc?: string,
-    category?: [string]
+    photo: string,
+    content: string,
+    category: [string]
 }
 
 const fetcher = (url: string): FetcherResponse<[PostData]> => {

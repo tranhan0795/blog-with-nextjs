@@ -4,16 +4,19 @@ const Post = require("../model/Post");
 const bcrypt = require("bcrypt");
 
 //update
-router.put("/:id", async (req, res) => {
-    if (req.body.userId === req.params.id) {
+router.post("/update", async (req, res) => {
+    if (req.body.username == req.session.username) {
 
         if (req.body.password) {
             const salt = await bcrypt.genSalt(10);
             req.body.password = await bcrypt.hash(req.body.password, salt);
         }
         try {
-            const updatedUser = await User.findByIdAndUpdate(req.params.id, {
-                $set: req.body
+            const updatedUser = await User.findOneAndUpdate(req.body.username, {
+                $set: {
+                    password: req.body.password,
+                    photo: req.body.photo
+                }
             }, {
                 new: true
             });
@@ -28,10 +31,10 @@ router.put("/:id", async (req, res) => {
 
 
 //delete
-router.delete("/:id", async (req, res) => {
-    if (req.body.userId === req.params.id) {
+router.delete("/", async (req, res) => {
+    if (req.body.username == req.session.username) {
         try {
-            const user = await User.findById(req.params.id);
+            const user = await User.find({username: req.params.name});
             if (!user) {
                 res.status(404).json("Can't find user");
                 return;
@@ -54,7 +57,7 @@ router.delete("/:id", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);         
+        const user = await User.findById(req.params.id);
         const {password, ...otherInfo} = user._doc;
         res.status(200).json(otherInfo);
     } catch (e) {
