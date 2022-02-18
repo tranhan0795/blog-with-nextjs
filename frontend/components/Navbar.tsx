@@ -7,9 +7,8 @@ const Navbar: React.FC = () => {
 
     const handleLogout = async () => {
 
-
         try {
-            const res = await fetch('http://localhost:4000/api/users/update', {
+            const res = await fetch('http://localhost:4000/api/post/logout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -24,8 +23,6 @@ const Navbar: React.FC = () => {
         } catch (e) {
             console.log(e);
         }
-
-
 
         setUser(emptyUser);
     }
